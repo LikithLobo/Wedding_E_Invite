@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Roce Celebration — Darrel Anson D'Souza</title>
+
+<!-- WhatsApp Preview Meta Tags -->
+<meta property="og:title" content="The Roce Celebration — Darrel D'Souza" />
+<meta property="og:description" content="Zita & Francis D'Souza cordially invite you to the Roce ceremony of their son Darrel on Saturday, 24th October 2026 at 7:00 PM." />
+<meta property="og:type" content="website" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+:root {
+--bg-page: #140E10;
+--card-bg: #FDFAF5;
+--burgundy-deep: #54111C;
+--burgundy-rich: #781B2A;
+--burgundy-soft: #9E3143;
+--gold-1: #F5E0A6;
+--gold-2: #C59B46;
+--gold-3: #8C6520;
+--text-dark: #2A1719;
+--text-muted: #6B4E54;
+--border-gold: #D8B775;
+}
+
+• { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+background-color: var(--bg-page);
+background-image:
+radial-gradient(circle at 50% 10%, rgba(197, 155, 70, 0.15) 0%, transparent 60%),
+radial-gradient(circle at 50% 90%, rgba(120, 27, 42, 0.2) 0%, transparent 60%);
+font-family: 'Cormorant Garamond', serif;
+color: var(--text-dark);
+min-height: 100vh;
+padding: 24px 12px;
+display: flex;
+justify-content: center;
+align-items: center;
+}
+
+.stage {
+width: 100%;
+max-width: 460px;
+position: relative;
+}
+
+/* Main Card with Extra Top Padding to Clear Corner Artwork */
+.card {
+background: var(--card-bg);
+position: relative;
+border-radius: 4px;
+padding: 72px 22px 42px;
+box-shadow:
+0 18px 45px rgba(0, 0, 0, 0.55),
+0 2px 6px rgba(197, 155, 70, 0.3);
+overflow: hidden;
+text-align: center;
+border: 1px solid var(--border-gold);
+}
+
+.card-inner-border {
+position: absolute;
+inset: 8px;
+border: 1px solid rgba(197, 155, 70, 0.4);
+pointer-events: none;
+z-index: 2;
+}
+
+/* Corner Artwork Tucked Away from Text */
+.corner-decor {
+position: absolute;
+pointer-events: none;
+z-index: 1;
+}
+.floral-tl {
+top: 0;
+left: 0;
+width: 76px;
+height: 76px;
+}
+.coconut-tr {
+top: 0;
+right: 0;
+width: 78px;
+height: 78px;
+}
+.floral-br {
+bottom: 0;
+right: 0;
+width: 76px;
+height: 76px;
+}
+
+/* Centered Content Container */
+.content {
+position: relative;
+z-index: 3;
+max-width: 340px;
+margin: 0 auto;
+}
+
+/* Event Title Positioned Completely Below Corner Art */
+.event-title {
+font-family: 'Alex Brush', cursive;
+font-size: clamp(34px, 8.5vw, 42px);
+line-height: 1.1;
+background: linear-gradient(135deg, #D4AF37 0%, #9E7422 60%, #C59B46 100%);
+-webkit-background-clip: text;
+background-clip: text;
+color: transparent;
+filter: drop-shadow(0 1px 0 rgba(255,255,255,0.8));
+margin-bottom: 8px;
+}
+
+/* Filigree Divider */
+.filigree {
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 8px;
+margin: 6px auto 14px;
+color: var(--gold-2);
+}
+.filigree svg { width: 70px; height: 11px; fill: currentColor; }
+
+/* Presenters */
+.presenters {
+font-size: 16.5px;
+font-weight: 700;
+letter-spacing: 0.08em;
+text-transform: uppercase;
+color: var(--burgundy-deep);
+margin-bottom: 4px;
+}
+
+.invite-line {
+font-style: italic;
+font-size: 14.5px;
+color: var(--text-muted);
+margin-bottom: 8px;
+}
+
+/* Groom Name */
+.names {
+font-family: 'Alex Brush', cursive;
+font-size: clamp(38px, 9.5vw, 46px);
+line-height: 1.1;
+background: linear-gradient(135deg, #D4AF37 0%, #9E7422 60%, #C59B46 100%);
+-webkit-background-clip: text;
+background-clip: text;
+color: transparent;
+margin: 4px 0 16px;
+filter: drop-shadow(0 1px 0 rgba(255,255,255,0.8));
+}
+
+/* Event Date & Venue Details */
+.event-details {
+margin: 12px 0 14px;
+}
+.date-time {
+font-size: 16.5px;
+font-weight: 700;
+color: var(--burgundy-rich);
+margin-bottom: 4px;
+}
+.venue {
+font-size: 17px;
+font-weight: 700;
+color: var(--burgundy-deep);
+line-height: 1.25;
+}
+.venue-sub {
+font-style: italic;
+font-size: 13.5px;
+color: var(--text-muted);
+margin-top: 2px;
+}
+
+/* Map Button */
+.map-action {
+margin: 12px 0 14px;
+}
+.btn-venue-map {
+display: inline-flex;
+align-items: center;
+gap: 5px;
+padding: 5px 15px;
+border: 1px solid var(--gold-2);
+border-radius: 20px;
+background: #FFFFFF;
+color: var(--burgundy-deep);
+font-family: 'Montserrat', sans-serif;
+font-size: 9.5px;
+font-weight: 600;
+letter-spacing: 0.1em;
+text-transform: uppercase;
+text-decoration: none;
+transition: all 0.2s ease;
+box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+.btn-venue-map:hover {
+background: var(--burgundy-deep);
+color: #FFFFFF;
+border-color: var(--burgundy-deep);
+transform: translateY(-1px);
+}
+.btn-venue-map svg {
+width: 8.5px;
+height: 8.5px;
+fill: currentColor;
+transform: rotate(45deg);
+}
+
+.follow-text {
+font-style: italic;
+font-size: 14.5px;
+color: var(--text-muted);
+margin-bottom: 12px;
+}
+
+/* Closing Section Cleared From Bottom Flowers */
+.closing-section {
+max-width: 260px;
+margin: 0 auto;
+}
+.compliments-title {
+font-size: 10px;
+letter-spacing: 0.14em;
+text-transform: uppercase;
+color: var(--text-muted);
+margin-bottom: 4px;
+}
+.compliments-names {
+font-size: 15.5px;
+font-weight: 700;
+color: var(--burgundy-deep);
+line-height: 1.35;
+}
+
+@media (max-width: 480px) {
+.card { padding: 66px 14px 38px; }
+}
+</style>
+</head>
+<body>
+
+<div class="stage">
+<div class="card">
+<div class="card-inner-border"></div>
+
+<!-- Top Left Burgundy Roses -->
+<svg class="corner-decor floral-tl" viewBox="0 0 160 160">
+<path d="M35 75 C18 65 12 42 28 26 C44 10 68 15 78 32 Z" fill="#657257" opacity="0.8"/>
+<path d="M68 30 C78 12 100 8 114 20 C128 34 122 56 105 65 Z" fill="#7B8869" opacity="0.85"/>
+<circle cx="46" cy="46" r="32" fill="#54111C"/>
+<circle cx="46" cy="46" r="24" fill="#781B2A"/>
+<circle cx="46" cy="46" r="14" fill="#9E3143"/>
+<circle cx="46" cy="46" r="6" fill="#D27685"/>
+<circle cx="86" cy="40" r="20" fill="#781B2A"/>
+<circle cx="86" cy="40" r="12" fill="#9E3143"/>
+<circle cx="36" cy="84" r="18" fill="#6A1B27"/>
+<circle cx="36" cy="84" r="10" fill="#9E3143"/>
+</svg>
+
+<!-- Top Right Coconut & Milk Splash Motif -->
+<svg class="corner-decor coconut-tr" viewBox="0 0 140 140">
+<path d="M70 40 C60 15 80 5 95 18 C110 30 100 45 80 48 Z" fill="#657257" opacity="0.85"/>
+<path d="M90 50 C110 35 125 45 120 62 C115 78 95 72 88 58 Z" fill="#7B8869" opacity="0.8"/>
+<ellipse cx="88" cy="74" rx="32" ry="28" fill="#5D3A1A"/>
+<ellipse cx="88" cy="74" rx="28" ry="24" fill="#784B24"/>
+<ellipse cx="88" cy="74" rx="22" ry="18" fill="#FFFDF8"/>
+<path d="M74 72 Q 85 84 96 74 Q 102 62 88 64 Q 76 62 74 72 Z" fill="#FFFFFF"/>
+<circle cx="72" cy="52" r="3" fill="#FFFFFF"/>
+<circle cx="104" cy="56" r="2.5" fill="#FFFFFF"/>
+<path d="M84 62 Q 80 48 86 44 Q 88 50 86 60 Z" fill="#FFFFFF"/>
+</svg>
+
+<!-- Bottom Right Burgundy Roses -->
+<svg class="corner-decor floral-br" viewBox="0 0 160 160">
+<path d="M125 85 C142 95 148 118 132 134 C116 150 92 145 82 128 Z" fill="#657257" opacity="0.8"/>
+<path d="M92 130 C82 148 60 152 46 140 C32 126 38 104 55 95 Z" fill="#7B8869" opacity="0.85"/>
+<circle cx="114" cy="114" r="32" fill="#54111C"/>
+<circle cx="114" cy="114" r="24" fill="#781B2A"/>
+<circle cx="114" cy="114" r="14" fill="#9E3143"/>
+<circle cx="114" cy="114" r="6" fill="#D27685"/>
+<circle cx="74" cy="120" r="20" fill="#781B2A"/>
+<circle cx="74" cy="120" r="12" fill="#9E3143"/>
+<circle cx="124" cy="76" r="18" fill="#6A1B27"/>
+<circle cx="124" cy="76" r="10" fill="#9E3143"/>
+</svg>
+
+<div class="content">
+
+<!-- Header Title Positioned Below the Corner Artwork -->
+<div class="event-title">The Roce Celebration</div>
+
+<!-- Filigree Divider -->
+<div class="filigree">
+<svg viewBox="0 0 100 15">
+<path d="M50 0 C45 7 35 7 20 7 L0 7 L20 8 C35 8 45 8 50 15 C55 8 65 8 80 8 L100 8 L80 7 C65 7 55 7 50 0 Z"/>
+<circle cx="50" cy="7.5" r="2.5"/>
+</svg>
+</div>
+
+<!-- Presenters -->
+<div class="presenters">Zita & Francis D'Souza</div>
+<div class="invite-line">cordially invite you to the Roce ceremony of their son</div>
+
+<!-- Groom Name -->
+<div class="names">Darrel Anson D'Souza</div>
+
+<!-- Venue & Timing -->
+<div class="event-details">
+<div class="date-time">Saturday, 24th October 2026 at 7:00 PM</div>
+<div class="venue">Chikmagalur Catholic Club</div>
+<div class="venue-sub">Undedasarahalli, Chikmagalur</div>
+</div>
+
+<!-- Location Map Button -->
+<div class="map-action">
+<a class="btn-venue-map" href="https://maps.google.com/?q=Chikmagalur+Catholic+Club,+Undedasarahalli,+Chikmagalur" target="_blank" rel="noopener noreferrer">
+<svg viewBox="0 0 24 24"><path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"/></svg>
+Tap to Open Map
+</a>
+</div>
+
+<div class="follow-text">Followed by dinner</div>
+
+<!-- Closing & Best Compliments -->
+<div class="closing-section">
+<div class="filigree" style="margin: 8px auto 10px;">
+<svg viewBox="0 0 100 15">
+<path d="M50 0 C45 7 35 7 20 7 L0 7 L20 8 C35 8 45 8 50 15 C55 8 65 8 80 8 L100 8 L80 7 C65 7 55 7 50 0 Z"/>
+<circle cx="50" cy="7.5" r="2.5"/>
+</svg>
+</div>
+
+<div class="compliments-title">With Best Compliments From</div>
+<div class="compliments-names">
+Manisha, Winston &<br>Kathryn Eva D'Souza
+</div>
+</div>
+
+</div>
+</div>
+</div>
+
+</body>
+</html>

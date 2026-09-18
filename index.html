@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#180207">
+<meta name="theme-color" content="#FBF4E5">
 
 <title>Ankitha & Darrel — Roce & Wedding Invitation</title>
 
@@ -46,7 +46,7 @@
   --ink:#2A2116;
   --ink-soft:#6B5D46;
 
-  --gold-light:#FFF0BD;
+  --gold-light:#FFF2C6;
   --gold:#DFC17B;
   --gold-dark:#9E742C;
 
@@ -54,7 +54,7 @@
   --burgundy-dark:#2D080E;
   --burgundy:#5C1A22;
   --burgundy-mid:#7E2631;
-  --burgundy-highlight:#9E3340;
+  --burgundy-light:#A83545;
 
   --line:rgba(158,116,44,.35);
   --shadow:0 28px 70px rgba(0,0,0,.55);
@@ -93,292 +93,230 @@ body{
 }
 
 /* =========================================================
-   CINEMATIC CURTAIN INTRO
+   AUDIO CONTROL BUTTON
 ========================================================= */
 
-.lux-reveal-stage{
+.audio-control-btn{
+  position:fixed;
+  top:16px;
+  right:16px;
+  z-index:1000001;
+  width:44px;
+  height:44px;
+  border-radius:50%;
+  border:1px solid var(--gold);
+  background:rgba(20,16,13,.88);
+  color:var(--gold-light);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  box-shadow:
+    0 6px 20px rgba(0,0,0,.55),
+    inset 0 0 12px rgba(255,240,189,.08);
+  backdrop-filter:blur(10px);
+  transition:
+    transform .3s ease,
+    border-color .3s ease,
+    background .3s ease,
+    opacity .3s ease;
+  opacity: 0.5; /* Dimmed initially if paused */
+}
+
+.audio-control-btn:hover{
+  transform:scale(1.08);
+  border-color:var(--gold-light);
+}
+
+.audio-control-btn.playing{
+  opacity: 1;
+  animation:audioGlow 2.5s infinite ease-in-out;
+}
+
+.audio-icon{
+  width:18px;
+  height:18px;
+  fill:currentColor;
+}
+
+@keyframes audioGlow{
+  0%,100%{ box-shadow:0 6px 20px rgba(0,0,0,.55); }
+  50%{ box-shadow:0 0 0 5px rgba(223,193,123,.08), 0 6px 25px rgba(223,193,123,.3); }
+}
+
+/* =========================================================
+   WATERCOLOR & GOLD LEAF BLEED REVEAL (SVG FILTER)
+========================================================= */
+
+.watercolor-stage{
   position:fixed;
   inset:0;
   width:100vw;
   height:100vh;
   z-index:999999;
   overflow:hidden;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:
-    linear-gradient(
-      180deg,
-      #1B0206 0%,
-      #2D080E 40%,
-      #1B0206 100%
-    );
   cursor:pointer;
-  transition:opacity 1s cubic-bezier(.65,0,.35,1);
+  pointer-events:all;
+  
+  /* Textured Ivory Watercolor Paper Background */
+  background-color: var(--ivory);
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.08'/%3E%3C/svg%3E");
+  
+  transition: opacity 1.2s ease-in-out;
 }
 
-.lux-reveal-stage.complete{
+.watercolor-stage.complete{
   opacity:0;
   pointer-events:none;
 }
 
-/* Clean Parchment Intro Card */
-.intro-card{
-  position:relative;
-  width:min(80vw,350px);
-  min-height:430px;
-  padding:42px 28px;
+/* The liquid filter container */
+.bloom-container{
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%, -50%);
+  width:100vmax;
+  height:100vmax;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  filter:url('#watercolorBleed');
+  pointer-events:none;
+}
+
+/* The expanding burgundy ink */
+.burgundy-drop{
+  position:absolute;
+  width:20vw;
+  height:20vw;
+  min-width:150px;
+  min-height:150px;
+  border-radius:50%;
+  background: radial-gradient(circle at center, var(--burgundy-dark) 0%, var(--burgundy) 40%, var(--burgundy-light) 75%, transparent 85%);
+  opacity:0;
+  transform:scale(0);
+  animation: inkBloom 4s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  will-change: transform, opacity;
+}
+
+/* The expanding liquid gold leaf streaks */
+.gold-leaf-streak-1, .gold-leaf-streak-2{
+  position:absolute;
+  border-radius:50%;
+  background: radial-gradient(circle at center, var(--gold-light) 0%, var(--gold) 45%, var(--gold-dark) 70%, transparent 85%);
+  mix-blend-mode: screen;
+  opacity:0;
+  transform:scale(0);
+  will-change: transform, opacity;
+}
+
+.gold-leaf-streak-1{
+  width:15vw; height:10vw;
+  min-width:120px; min-height:80px;
+  animation: goldBloom 4s cubic-bezier(0.2, 0.8, 0.2, 1) 0.2s forwards;
+}
+
+.gold-leaf-streak-2{
+  width:10vw; height:18vw;
+  min-width:80px; min-height:140px;
+  margin-left:20px; margin-top:-20px;
+  animation: goldBloom 4s cubic-bezier(0.2, 0.8, 0.2, 1) 0.4s forwards;
+}
+
+/* Center Golden Monogram Text inside the watercolor */
+.watercolor-monogram-box{
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%, -50%);
   display:flex;
   flex-direction:column;
   align-items:center;
-  justify-content:center;
-  text-align:center;
-  background: var(--ivory);
-  border:1px solid rgba(158,116,44,.75);
-  box-shadow:
-    0 24px 60px rgba(0,0,0,.6),
-    inset 0 0 35px rgba(255,255,255,.5);
-  z-index:4;
-  transform:scale(.96);
-  transition:transform 1s ease, opacity .8s ease;
+  z-index:10;
+  opacity:0;
+  animation: textFadeIn 2s ease forwards 0.5s;
 }
 
-.lux-reveal-stage.parting .intro-card{
-  transform:scale(1.04);
-}
-
-.intro-card::before{
-  content:"";
-  position:absolute;
-  inset:9px;
-  border:1px solid rgba(140,107,51,.45);
-  pointer-events:none;
-}
-
-.intro-small{
-  position:relative;
-  z-index:1;
-  font-family:'Cormorant Garamond',serif;
-  font-size:10.5px;
-  letter-spacing:.28em;
-  text-transform:uppercase;
-  color:var(--ink-soft);
-}
-
-.intro-script{
-  position:relative;
-  z-index:1;
-  margin:12px 0 4px;
-  font-family:'Tangerine',cursive;
-  font-weight:700;
-  font-size:58px;
-  line-height:.9;
-  background:
-    linear-gradient(
-      160deg,
-      var(--gold-light),
-      var(--gold-dark) 55%,
-      var(--gold-light)
-    );
+.watercolor-monogram{
+  font-family:'Cormorant Garamond', serif;
+  font-style:italic;
+  font-size:42px;
+  font-weight:600;
+  background:linear-gradient(135deg, #FFF2C6 0%, #DFC17B 50%, #9E742C 100%);
   -webkit-background-clip:text;
   background-clip:text;
   color:transparent;
+  letter-spacing:0.05em;
+  text-shadow:0 2px 15px rgba(0,0,0,0.4);
 }
 
-.intro-names{
-  position:relative;
-  z-index:1;
-  font-family:'Cormorant Garamond',serif;
+.watercolor-hint{
+  margin-top:12px;
+  font-family:'Cormorant Garamond', serif;
   font-style:italic;
-  font-weight:600;
-  font-size:29px;
-  color:var(--burgundy);
-  letter-spacing:.03em;
-  line-height:1.1;
-}
-
-.intro-amp{
-  position:relative;
-  z-index:1;
-  margin:2px 0;
-  font-family:'Tangerine',cursive;
-  font-size:38px;
-  color:var(--gold-dark);
-}
-
-.intro-ornament{
-  position:relative;
-  z-index:1;
-  margin:14px 0 8px;
-  color:var(--gold-dark);
   font-size:13px;
-  letter-spacing:.45em;
-}
-
-.intro-dates{
-  position:relative;
-  z-index:1;
-  font-family:'Cormorant Garamond',serif;
-  font-size:12px;
-  letter-spacing:.18em;
+  letter-spacing:0.2em;
   text-transform:uppercase;
-  color:var(--gold-dark);
+  color:var(--ivory-soft);
+  text-shadow:0 1px 4px rgba(0,0,0,0.5);
+  animation:pulseHint 2s infinite ease-in-out;
 }
 
-.intro-tap{
-  position:relative;
-  z-index:1;
-  margin-top:22px;
-  font-family:'Cormorant Garamond',serif;
-  font-style:italic;
-  font-size:12.5px;
-  letter-spacing:.18em;
-  text-transform:uppercase;
-  color:var(--burgundy);
-  animation:pulseTap 2s infinite ease-in-out;
+/* Animations for initial load */
+@keyframes inkBloom {
+  0% { transform: scale(0); opacity: 0; }
+  10% { opacity: 0.95; }
+  100% { transform: scale(1.6); opacity: 0.85; }
 }
 
-@keyframes pulseTap{
-  0%,100%{opacity:.55;transform:translateY(0)}
-  50%{opacity:1;transform:translateY(-3px)}
+@keyframes goldBloom {
+  0% { transform: scale(0) rotate(0deg); opacity: 0; }
+  10% { opacity: 0.9; }
+  100% { transform: scale(1.4) rotate(15deg); opacity: 0.8; }
+}
+
+@keyframes textFadeIn {
+  0% { opacity: 0; transform: translateY(10px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulseHint {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+/* 
+  TRIGGERED WASH OVER EFFECT
+  When timer hits, the watercolor MASSIVELY scales to cover the screen
+*/
+.watercolor-stage.washing-over .burgundy-drop {
+  animation: washOverScreen 1.5s cubic-bezier(0.6, 0.05, 0.15, 1) forwards;
+}
+
+.watercolor-stage.washing-over .gold-leaf-streak-1,
+.watercolor-stage.washing-over .gold-leaf-streak-2 {
+  animation: washOverScreenGold 1.5s cubic-bezier(0.6, 0.05, 0.15, 1) forwards;
+}
+
+.watercolor-stage.washing-over .watercolor-monogram-box {
+  transition: opacity 0.5s ease, transform 0.8s ease;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(1.2);
+}
+
+@keyframes washOverScreen {
+  0% { transform: scale(1.6); opacity: 0.85; }
+  100% { transform: scale(25); opacity: 1; }
+}
+
+@keyframes washOverScreenGold {
+  0% { transform: scale(1.4) rotate(15deg); opacity: 0.8; }
+  100% { transform: scale(20) rotate(45deg); opacity: 1; }
 }
 
 /* =========================================================
-   VELVET CURTAINS
-========================================================= */
-
-.velvet-drape{
-  position:absolute;
-  top:-2%;
-  width:48vw;
-  height:105%;
-  z-index:10;
-  transition:transform 1.5s cubic-bezier(.77,0,.175,1);
-  will-change:transform;
-  pointer-events:none;
-}
-
-.drape-left{
-  left:0;
-  background:
-    radial-gradient(
-      ellipse at 0% 40%,
-      rgba(255,255,255,.14),
-      transparent 60%
-    ),
-    repeating-linear-gradient(
-      108deg,
-      var(--burgundy-black) 0,
-      var(--burgundy-dark) 16px,
-      #480F17 32px,
-      var(--burgundy-mid) 48px,
-      var(--burgundy-highlight) 54px,
-      var(--burgundy-mid) 62px,
-      #480F17 78px,
-      var(--burgundy-black) 96px
-    );
-  clip-path:polygon(
-    0 0,
-    100% 0,
-    57% 43%,
-    27% 100%,
-    0 100%
-  );
-  filter:drop-shadow(14px 0 28px rgba(0,0,0,.8));
-}
-
-.drape-right{
-  right:0;
-  background:
-    radial-gradient(
-      ellipse at 100% 40%,
-      rgba(255,255,255,.14),
-      transparent 60%
-    ),
-    repeating-linear-gradient(
-      -108deg,
-      var(--burgundy-black) 0,
-      var(--burgundy-dark) 16px,
-      #480F17 32px,
-      var(--burgundy-mid) 48px,
-      var(--burgundy-highlight) 54px,
-      var(--burgundy-mid) 62px,
-      #480F17 78px,
-      var(--burgundy-black) 96px
-    );
-  clip-path:polygon(
-    0 0,
-    100% 0,
-    100% 100%,
-    73% 100%,
-    43% 43%
-  );
-  filter:drop-shadow(-14px 0 28px rgba(0,0,0,.8));
-}
-
-.bullion-edge{
-  position:absolute;
-  inset:0;
-}
-
-.drape-left .bullion-edge{
-  border-right:3px solid var(--gold);
-  box-shadow:
-    inset -2px 0 8px rgba(255,240,189,.5),
-    2px 0 12px rgba(0,0,0,.65);
-}
-
-.drape-right .bullion-edge{
-  border-left:3px solid var(--gold);
-  box-shadow:
-    inset 2px 0 8px rgba(255,240,189,.5),
-    -2px 0 12px rgba(0,0,0,.65);
-}
-
-.lux-reveal-stage.parting .drape-left{
-  transform:translateX(-125%);
-}
-
-.lux-reveal-stage.parting .drape-right{
-  transform:translateX(125%);
-}
-
-/* Gold Valance */
-.valance-swag-bar{
-  position:absolute;
-  top:0;
-  left:0;
-  width:100%;
-  height:52px;
-  background:
-    linear-gradient(
-      180deg,
-      #120104 0%,
-      #2A050B 60%,
-      transparent 100%
-    );
-  border-bottom:2px solid var(--gold);
-  z-index:18;
-  box-shadow:0 10px 30px rgba(0,0,0,.7);
-}
-
-.valance-bullion-fringe{
-  position:absolute;
-  bottom:-8px;
-  width:100%;
-  height:8px;
-  background:
-    repeating-linear-gradient(
-      90deg,
-      var(--gold-light) 0,
-      var(--gold) 2px,
-      transparent 2px,
-      transparent 5px
-    );
-}
-
-/* =========================================================
-   PAGE
+   PAGE INVITATION CONTENT
 ========================================================= */
 
 .stage{
@@ -395,10 +333,10 @@ body{
     var(--shadow),
     0 8px 22px rgba(0,0,0,.4);
   opacity:0;
-  transform:translateY(20px);
+  transform:translateY(15px);
   transition:
-    opacity 1s ease .25s,
-    transform 1s cubic-bezier(.2,.7,.2,1) .25s;
+    opacity 1.2s ease .4s,
+    transform 1.2s cubic-bezier(.2,.8,.2,1) .4s;
 }
 
 body.invitation-open .page{
@@ -769,6 +707,64 @@ body.invitation-open .page{
   transform:rotate(45deg);
 }
 
+/* Live Countdown Timer */
+.countdown-wrapper{
+  text-align:center;
+  margin:45px auto 25px;
+  padding:20px 10px;
+  position:relative;
+  background: radial-gradient(ellipse at top, rgba(201,161,92,0.08), transparent 70%);
+}
+
+.countdown-wrapper::before{
+  content:'';
+  position:absolute;
+  top:0; left:50%; transform:translateX(-50%);
+  width:80px; height:1px;
+  background:linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+
+.countdown-title{
+  font-family:'Tangerine', cursive;
+  font-size:36px;
+  font-weight:700;
+  color:var(--burgundy);
+  margin-bottom:15px;
+}
+
+.countdown{
+  display:flex;
+  justify-content:center;
+  gap:16px;
+}
+
+.cd-box{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  min-width:55px;
+}
+
+.cd-num{
+  font-family:'Cormorant Garamond', serif;
+  font-size:32px;
+  font-weight:600;
+  color:var(--ink);
+  line-height:1;
+  background: linear-gradient(160deg, #E9C876, #8C6B33 60%, #E9C876);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.cd-text{
+  font-size:10px;
+  letter-spacing:0.18em;
+  text-transform:uppercase;
+  color:var(--ink-soft);
+  margin-top:6px;
+}
+
 /* Timeline */
 .event-timeline{
   max-width:360px;
@@ -811,35 +807,26 @@ body.invitation-open .page{
     );
 }
 
-/* Compliments */
-.compliments{
+/* Consolidated Compliments */
+.compliments-section{
   text-align:center;
-  margin-top:36px;
-  padding-top:20px;
+  margin:45px auto 10px;
   position:relative;
-  font-size:12.5px;
+  font-size:13.5px;
   letter-spacing:.05em;
   color:var(--ink-soft);
 }
 
-.compliments::before{
-  content:"";
-  position:absolute;
-  top:0;
-  left:50%;
-  transform:translateX(-50%);
-  width:40px;
-  height:1px;
-  background:var(--gold);
-}
-
-.compliments b{
+.compliments-section b{
   color:var(--burgundy);
   font-family:'Cormorant Garamond',serif;
   font-weight:600;
-  font-size:14.5px;
+  font-size:16.5px;
+  display:block;
+  margin-top:6px;
 }
 
+/* Main Divider */
 .divider-main{
   display:flex;
   align-items:center;
@@ -869,7 +856,7 @@ body.invitation-open .page{
 /* Final Actions */
 .final-actions{
   text-align:center;
-  margin:38px auto 0;
+  margin:30px auto 0;
   max-width:620px;
 }
 
@@ -927,7 +914,6 @@ body.invitation-open .page{
   letter-spacing:.12em;
 }
 
-/* Mobile */
 @media(max-width:480px){
   body{
     padding:24px 9px 45px;
@@ -970,22 +956,16 @@ body.invitation-open .page{
       );
   }
 
-  .velvet-drape{
-    width:43vw;
+  .countdown{
+    gap:10px;
+  }
+  
+  .cd-box{
+    min-width:45px;
   }
 
-  .intro-card{
-    width:84vw;
-    min-height:390px;
-    padding:34px 20px;
-  }
-
-  .intro-script{
-    font-size:52px;
-  }
-
-  .intro-names{
-    font-size:26px;
+  .cd-num{
+    font-size:28px;
   }
 
   .event-timeline{
@@ -1012,43 +992,67 @@ body.invitation-open .page{
 
 <body>
 
-<!-- CINEMATIC INTRO -->
+<!-- AUDIO CONTROL -->
+<button
+  class="audio-control-btn"
+  id="audioToggle"
+  title="Toggle Music"
+  aria-label="Toggle background music"
+  aria-pressed="false">
+  <svg class="audio-icon" viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+  </svg>
+</button>
+
+<audio id="bgMusic" loop preload="auto">
+  <source src="https://cdn.pixabay.com/download/audio/2022/05/16/audio_c890886910.mp3?filename=acoustic-guitars-ambient-uplifting-calm-peaceful-112211.mp3" type="audio/mp3">
+</audio>
+
+<!-- SVG TURBULENCE FILTER FOR WATERCOLOR EFFECT -->
+<svg style="position: absolute; width: 0; height: 0; pointer-events: none;" aria-hidden="true">
+  <filter id="watercolorBleed" x="-50%" y="-50%" width="200%" height="200%">
+    <!-- Fractal noise creates the organic, irregular edge of liquid spreading -->
+    <feTurbulence type="fractalNoise" baseFrequency="0.015" numOctaves="4" result="noise" seed="5"/>
+    <feDisplacementMap in="SourceGraphic" in2="noise" scale="70" xChannelSelector="R" yChannelSelector="G" result="displaced"/>
+    <!-- Blur softens the hard pixels into a wash -->
+    <feGaussianBlur in="displaced" stdDeviation="10" result="blurred"/>
+    <!-- Color matrix boosts the alpha to fix blurred transparency -->
+    <feColorMatrix in="blurred" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 20 -5"/>
+  </filter>
+</svg>
+
+<!-- WATERCOLOR BLEED STAGE -->
 <div
-  class="lux-reveal-stage"
+  class="watercolor-stage"
   id="revealStage"
   role="button"
   tabindex="0"
   aria-label="Open wedding invitation">
 
-  <div class="intro-card">
-    <div class="intro-small">With God's Blessings</div>
-    <div class="intro-script">Together</div>
-    <div class="intro-names">Ankitha</div>
-    <div class="intro-amp">&</div>
-    <div class="intro-names">Darrel</div>
-    <div class="intro-ornament">❖</div>
-    <div class="intro-dates">21 · 25 October 2026</div>
-    <div class="intro-tap">Opening invitation...</div>
+  <!-- Container applies the liquid SVG filter to all drops inside -->
+  <div class="bloom-container">
+    <!-- Deep burgundy ink drop -->
+    <div class="burgundy-drop"></div>
+    
+    <!-- Shimmering gold leaf streaks blending in -->
+    <div class="gold-leaf-streak-1"></div>
+    <div class="gold-leaf-streak-2"></div>
   </div>
 
-  <div class="valance-swag-bar">
-    <div class="valance-bullion-fringe"></div>
+  <!-- Center typography sitting on top of the watercolor -->
+  <div class="watercolor-monogram-box">
+    <div class="watercolor-monogram">A &amp; D</div>
+    <div class="watercolor-hint">Opening invitation...</div>
   </div>
 
-  <div class="velvet-drape drape-left">
-    <div class="bullion-edge"></div>
-  </div>
-
-  <div class="velvet-drape drape-right">
-    <div class="bullion-edge"></div>
-  </div>
 </div>
 
-<!-- ROCE -->
+<!-- ROCE SECTION -->
 <div class="stage">
   <div class="page">
     <div class="page-inner">
 
+      <!-- Corner flourishes -->
       <div class="corner tl">
         <svg viewBox="0 0 78 78">
           <path d="M3 3 Q3 34 34 34 M3 3 Q34 3 34 34" fill="none" stroke="#C9A15C" stroke-width="1"/>
@@ -1056,7 +1060,6 @@ body.invitation-open .page{
           <circle cx="3" cy="3" r="2.2" fill="#C9A15C"/>
         </svg>
       </div>
-
       <div class="corner tr">
         <svg viewBox="0 0 78 78">
           <path d="M3 3 Q3 34 34 34 M3 3 Q34 3 34 34" fill="none" stroke="#C9A15C" stroke-width="1"/>
@@ -1064,7 +1067,6 @@ body.invitation-open .page{
           <circle cx="3" cy="3" r="2.2" fill="#C9A15C"/>
         </svg>
       </div>
-
       <div class="corner bl">
         <svg viewBox="0 0 78 78">
           <path d="M3 3 Q3 34 34 34 M3 3 Q34 3 34 34" fill="none" stroke="#C9A15C" stroke-width="1"/>
@@ -1072,7 +1074,6 @@ body.invitation-open .page{
           <circle cx="3" cy="3" r="2.2" fill="#C9A15C"/>
         </svg>
       </div>
-
       <div class="corner br">
         <svg viewBox="0 0 78 78">
           <path d="M3 3 Q3 34 34 34 M3 3 Q34 3 34 34" fill="none" stroke="#C9A15C" stroke-width="1"/>
@@ -1109,36 +1110,16 @@ body.invitation-open .page{
         </div>
 
         <div class="action-buttons">
-          <a
-            class="action-btn"
-            href="https://maps.app.goo.gl/AMfeDBrc9eDHZFio8?g_st=ac"
-            target="_blank"
-            rel="noopener noreferrer">
-            <svg class="action-icon map-icon" viewBox="0 0 24 24">
-              <path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"/>
-            </svg>
-            Location
+          <a class="action-btn" href="https://maps.app.goo.gl/AMfeDBrc9eDHZFio8?g_st=ac" target="_blank" rel="noopener noreferrer">
+            <svg class="action-icon map-icon" viewBox="0 0 24 24"><path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"/></svg>Location
           </a>
-
-          <!-- App-Direct Calendar Opener -->
-          <button
-            class="action-btn"
-            type="button"
-            onclick="openInCalendarApp('roce')">
-            <svg class="action-icon" viewBox="0 0 24 24">
-              <path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11zM7 11h5v5H7z"/>
-            </svg>
-            Reminder
+          <button class="action-btn" type="button" onclick="openInCalendarApp('roce')">
+            <svg class="action-icon" viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11zM7 11h5v5H7z"/></svg>Reminder
           </button>
         </div>
 
         <div class="roce-follow">
           Followed by lunch and celebration at 12:00 PM
-        </div>
-
-        <div class="compliments">
-          With Best Compliments from<br>
-          <b>Likith Liston Lobo</b>
         </div>
       </div>
 
@@ -1148,31 +1129,22 @@ body.invitation-open .page{
 
 <!-- TIMELINE -->
 <div class="event-timeline">
-  <div class="timeline-item">
-    <div class="timeline-date">21 OCT</div>
-    <div class="timeline-title">Roce</div>
-  </div>
-
+  <div class="timeline-item"><div class="timeline-date">21 OCT</div><div class="timeline-title">Roce</div></div>
   <div class="timeline-line"></div>
-
-  <div class="timeline-item">
-    <div class="timeline-date">25 OCT</div>
-    <div class="timeline-title">Wedding</div>
-  </div>
+  <div class="timeline-item"><div class="timeline-date">25 OCT</div><div class="timeline-title">Wedding</div></div>
 </div>
 
 <!-- DIVIDER -->
 <div class="divider-main">
-  <div class="line"></div>
-  <div class="mark">❖</div>
-  <div class="line"></div>
+  <div class="line"></div><div class="mark">❖</div><div class="line"></div>
 </div>
 
-<!-- WEDDING -->
+<!-- WEDDING SECTION -->
 <div class="stage">
   <div class="page">
     <div class="page-inner">
 
+      <!-- Corner flourishes -->
       <div class="corner tl">
         <svg viewBox="0 0 78 78">
           <path d="M3 3 Q3 34 34 34 M3 3 Q34 3 34 34" fill="none" stroke="#C9A15C" stroke-width="1"/>
@@ -1180,7 +1152,6 @@ body.invitation-open .page{
           <circle cx="3" cy="3" r="2.2" fill="#C9A15C"/>
         </svg>
       </div>
-
       <div class="corner tr">
         <svg viewBox="0 0 78 78">
           <path d="M3 3 Q3 34 34 34 M3 3 Q34 3 34 34" fill="none" stroke="#C9A15C" stroke-width="1"/>
@@ -1188,7 +1159,6 @@ body.invitation-open .page{
           <circle cx="3" cy="3" r="2.2" fill="#C9A15C"/>
         </svg>
       </div>
-
       <div class="corner bl">
         <svg viewBox="0 0 78 78">
           <path d="M3 3 Q3 34 34 34 M3 3 Q34 3 34 34" fill="none" stroke="#C9A15C" stroke-width="1"/>
@@ -1196,7 +1166,6 @@ body.invitation-open .page{
           <circle cx="3" cy="3" r="2.2" fill="#C9A15C"/>
         </svg>
       </div>
-
       <div class="corner br">
         <svg viewBox="0 0 78 78">
           <path d="M3 3 Q3 34 34 34 M3 3 Q34 3 34 34" fill="none" stroke="#C9A15C" stroke-width="1"/>
@@ -1242,6 +1211,17 @@ body.invitation-open .page{
 
         <div class="quote-ref">1 Corinthians 13:4–8</div>
 
+        <!-- COUNTDOWN TIMER -->
+        <div class="countdown-wrapper">
+          <div class="countdown-title">The Celebration Begins In</div>
+          <div class="countdown" id="countdown">
+            <div class="cd-box"><span class="cd-num" id="cd-days">00</span><span class="cd-text">Days</span></div>
+            <div class="cd-box"><span class="cd-num" id="cd-hours">00</span><span class="cd-text">Hrs</span></div>
+            <div class="cd-box"><span class="cd-num" id="cd-mins">00</span><span class="cd-text">Mins</span></div>
+            <div class="cd-box"><span class="cd-num" id="cd-secs">00</span><span class="cd-text">Secs</span></div>
+          </div>
+        </div>
+
         <div class="events">
           <!-- MASS -->
           <div class="event">
@@ -1255,26 +1235,11 @@ body.invitation-open .page{
             </div>
 
             <div class="action-buttons">
-              <a
-                class="action-btn"
-                href="https://maps.app.goo.gl/BT33dR5rJaDLcTYS7?g_st=ac"
-                target="_blank"
-                rel="noopener noreferrer">
-                <svg class="action-icon map-icon" viewBox="0 0 24 24">
-                  <path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"/>
-                </svg>
-                Church
+              <a class="action-btn" href="https://maps.app.goo.gl/BT33dR5rJaDLcTYS7?g_st=ac" target="_blank" rel="noopener noreferrer">
+                <svg class="action-icon map-icon" viewBox="0 0 24 24"><path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"/></svg>Church
               </a>
-
-              <!-- App-Direct Calendar Opener -->
-              <button
-                class="action-btn"
-                type="button"
-                onclick="openInCalendarApp('mass')">
-                <svg class="action-icon" viewBox="0 0 24 24">
-                  <path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11zM7 11h5v5H7z"/>
-                </svg>
-                Reminder
+              <button class="action-btn" type="button" onclick="openInCalendarApp('mass')">
+                <svg class="action-icon" viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11zM7 11h5v5H7z"/></svg>Reminder
               </button>
             </div>
           </div>
@@ -1296,39 +1261,25 @@ body.invitation-open .page{
             </div>
 
             <div class="action-buttons">
-              <a
-                class="action-btn"
-                href="https://maps.app.goo.gl/mk6mMtDazdGn9NHg9?g_st=ac"
-                target="_blank"
-                rel="noopener noreferrer">
-                <svg class="action-icon map-icon" viewBox="0 0 24 24">
-                  <path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"/>
-                </svg>
-                Hall
+              <a class="action-btn" href="https://maps.app.goo.gl/mk6mMtDazdGn9NHg9?g_st=ac" target="_blank" rel="noopener noreferrer">
+                <svg class="action-icon map-icon" viewBox="0 0 24 24"><path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"/></svg>Hall
               </a>
-
-              <!-- App-Direct Calendar Opener -->
-              <button
-                class="action-btn"
-                type="button"
-                onclick="openInCalendarApp('reception')">
-                <svg class="action-icon" viewBox="0 0 24 24">
-                  <path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11zM7 11h5v5H7z"/>
-                </svg>
-                Reminder
+              <button class="action-btn" type="button" onclick="openInCalendarApp('reception')">
+                <svg class="action-icon" viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11zM7 11h5v5H7z"/></svg>Reminder
               </button>
             </div>
           </div>
-        </div>
-
-        <div class="compliments">
-          With Best Compliments From<br>
-          <b>Likith Liston Lobo</b>
         </div>
       </div>
 
     </div>
   </div>
+</div>
+
+<!-- CONSOLIDATED COMPLIMENTS -->
+<div class="compliments-section">
+  With Best Compliments from
+  <b>Likith Liston Lobo &amp; Family</b>
 </div>
 
 <!-- FINAL SHARE AREA -->
@@ -1337,7 +1288,10 @@ body.invitation-open .page{
   <div class="final-subtitle">Your presence will make our celebration even more special.</div>
 
   <div class="final-buttons">
-    <button class="final-btn" id="shareButton" type="button">Share Invitation</button>
+    <button class="final-btn" id="shareButton" type="button">
+      <svg class="action-icon" viewBox="0 0 24 24" style="margin-right: 6px;"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg>
+      Share via WhatsApp
+    </button>
   </div>
 </div>
 
@@ -1346,81 +1300,143 @@ body.invitation-open .page{
 </div>
 
 <script>
+/* =========================================================
+   MUSIC AND REVEAL LOGIC
+========================================================= */
 const stage = document.getElementById('revealStage');
+const audio = document.getElementById('bgMusic');
+const audioToggle = document.getElementById('audioToggle');
 const shareButton = document.getElementById('shareButton');
 let hasOpened = false;
 
-function openInvitation(){
+function startMusic(){
+  if(!audio) return;
+  audio.volume = 0.35;
+  audio.play()
+    .then(() => {
+      audioToggle.classList.add('playing');
+      audioToggle.setAttribute('aria-pressed', 'true');
+    })
+    .catch(() => {
+      // Autoplay blocked by browser. User can tap the audio button manually.
+    });
+}
+
+audioToggle.addEventListener('click', function(e){
+  e.stopPropagation();
+  if(audio.paused){
+    audio.play()
+      .then(() => {
+        audio.volume = 0.35;
+        audioToggle.classList.add('playing');
+        audioToggle.setAttribute('aria-pressed', 'true');
+      })
+      .catch(() => {});
+  } else {
+    audio.pause();
+    audioToggle.classList.remove('playing');
+    audioToggle.setAttribute('aria-pressed', 'false');
+  }
+});
+
+function triggerWatercolorReveal(){
   if(hasOpened) return;
   hasOpened = true;
 
   document.body.classList.add('invitation-open');
-  stage.classList.add('parting');
+  startMusic();
+  
+  // Wash the watercolor over the whole screen
+  stage.classList.add('washing-over');
 
+  // Once it covers the screen, fade the entire stage out
   setTimeout(() => {
     stage.classList.add('complete');
     setTimeout(() => {
       stage.style.display = 'none';
-    }, 1000);
-  }, 850);
+    }, 1200);
+  }, 1200);
 }
 
-// Tap or keyboard to open immediately
-stage.addEventListener('click', openInvitation);
+// User tap to trigger immediately
+stage.addEventListener('click', triggerWatercolorReveal);
 stage.addEventListener('keydown', function(e){
   if(e.key === 'Enter' || e.key === ' '){
     e.preventDefault();
-    openInvitation();
+    triggerWatercolorReveal();
   }
 });
 
 // Auto-reveal after exactly 2 seconds
 setTimeout(() => {
-  if(!hasOpened) openInvitation();
+  if(!hasOpened) triggerWatercolorReveal();
 }, 2000);
 
-// Native Share API Handler
-shareButton.addEventListener('click', async function(){
-  const shareData = {
-    title: 'Ankitha & Darrel — Wedding Invitation',
-    text: 'You are cordially invited to celebrate the Roce and Wedding of Ankitha & Darrel.',
-    url: window.location.href
-  };
-
-  try{
-    if(navigator.share && navigator.canShare && navigator.canShare(shareData)){
-      await navigator.share(shareData);
-    } else if(navigator.share){
-      await navigator.share(shareData);
-    } else {
-      await navigator.clipboard.writeText(window.location.href);
-      alert('Invitation link copied to clipboard!');
-    }
-  } catch(error) {}
-});
 
 /* =========================================================
-   OPEN IN CALENDAR APP (DIRECT IN-APP, NO FILE DOWNLOAD)
+   COUNTDOWN TIMER LOGIC
+========================================================= */
+// Target: Oct 25, 2026 at 5:00 PM IST (+05:30)
+const targetDate = new Date("2026-10-25T17:00:00+05:30").getTime();
+
+const x = setInterval(function() {
+  const now = new Date().getTime();
+  const distance = targetDate - now;
+
+  if (distance < 0) {
+    clearInterval(x);
+    document.getElementById("cd-days").innerText = "00";
+    document.getElementById("cd-hours").innerText = "00";
+    document.getElementById("cd-mins").innerText = "00";
+    document.getElementById("cd-secs").innerText = "00";
+    return;
+  }
+
+  const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+  const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+  document.getElementById("cd-days").innerText = days.toString().padStart(2, '0');
+  document.getElementById("cd-hours").innerText = hours.toString().padStart(2, '0');
+  document.getElementById("cd-mins").innerText = minutes.toString().padStart(2, '0');
+  document.getElementById("cd-secs").innerText = seconds.toString().padStart(2, '0');
+}, 1000);
+
+
+/* =========================================================
+   WHATSAPP DIRECT SHARE
+========================================================= */
+shareButton.addEventListener('click', function(){
+  const shareText = "✨ We joyfully invite you to the Roce and Wedding of Ankitha & Darrel! ✨\n\n🗓 Roce: 21 Oct 2026\n⛪ Wedding: 25 Oct 2026\n\nTap the link below for venues, timings, and to save the dates to your calendar:\n" + window.location.href;
+  
+  const whatsappUrl = "https://api.whatsapp.com/send?text=" + encodeURIComponent(shareText);
+  window.open(whatsappUrl, '_blank');
+});
+
+
+/* =========================================================
+   OPEN IN CALENDAR APP
 ========================================================= */
 const eventData = {
   roce: {
-    title: "Roce Celebration - Ankitha Lobo",
-    start: "20261021T050000Z", // 10:30 AM IST
-    end: "20261021T100000Z",   // 3:30 PM IST
+    title: "Roce Ceremony - Ankitha Lobo",
+    start: "20261021T050000Z",
+    end: "20261021T100000Z",
     location: "St. Anne's Church Hall, Virajpet, Karnataka",
     details: "Roce ceremony followed by lunch and celebration.\nMap: https://maps.app.goo.gl/AMfeDBrc9eDHZFio8"
   },
   mass: {
     title: "Nuptial Mass - Ankitha & Darrel",
-    start: "20261025T113000Z", // 5:00 PM IST
-    end: "20261025T130000Z",   // 6:30 PM IST
+    start: "20261025T113000Z",
+    end: "20261025T130000Z",
     location: "Christ the King Church, Jyothinagar, K.M. Road, Chikkamagaluru",
     details: "Holy Sacrament of Matrimony uniting Ankitha Lobo & Darrel D'Souza.\nMap: https://maps.app.goo.gl/BT33dR5rJaDLcTYS7"
   },
   reception: {
     title: "Wedding Reception - Ankitha & Darrel",
-    start: "20261025T130000Z", // 6:30 PM IST
-    end: "20261025T173000Z",   // 11:00 PM IST
+    start: "20261025T130000Z",
+    end: "20261025T173000Z",
     location: "C N Windsor, Jyothinagar, Chikkamagaluru",
     details: "Wedding reception and dinner celebration of Ankitha & Darrel.\nMap: https://maps.app.goo.gl/mk6mMtDazdGn9NHg9"
   }
@@ -1434,8 +1450,6 @@ function openInCalendarApp(type) {
   const isApple = /iPad|iPhone|iPod|Macintosh/i.test(userAgent) && !window.MSStream;
 
   if (isApple) {
-    // Generates an in-memory calendar string for Apple Calendar.
-    // iOS Safari interprets data:text/calendar as an in-app "Add Event" sheet.
     const icsContent = [
       "BEGIN:VCALENDAR",
       "VERSION:2.0",
@@ -1456,11 +1470,8 @@ function openInCalendarApp(type) {
       "END:VCALENDAR"
     ].join("\r\n");
 
-    const dataUri = "data:text/calendar;charset=utf8," + encodeURIComponent(icsContent);
-    window.location.href = dataUri;
+    window.location.href = "data:text/calendar;charset=utf8," + encodeURIComponent(icsContent);
   } else {
-    // On Android/Windows, directly targets the calendar app viewer via Google Calendar web intent.
-    // On mobile Android, this directly opens the native Google Calendar app without downloading any file.
     const gCalUrl = "https://calendar.google.com/calendar/render?action=TEMPLATE" +
       "&text=" + encodeURIComponent(ev.title) +
       "&dates=" + ev.start + "/" + ev.end +
